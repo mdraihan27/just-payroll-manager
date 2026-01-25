@@ -1,6 +1,6 @@
-package Entities;
+package entities;
 
-public class Officer extends Employee{
+public class Officer extends Employee {
     private String office;
     private String employmentType;
 

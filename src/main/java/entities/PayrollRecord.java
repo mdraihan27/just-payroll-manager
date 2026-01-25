@@ -1,13 +1,13 @@
-package Entities;
+package entities;
 
-public class Payroll {
+public class PayrollRecord {
     private int employeeId;
     private int month;
     private int year;
     private String disbursedOn;
     private Salary salary;
 
-    public Payroll(int employeeId, int month, int year, String disbursedOn,  Salary salary) {
+    public PayrollRecord(int employeeId, int month, int year, String disbursedOn, Salary salary) {
         this.employeeId = employeeId;
         this.month = month;
         this.year = year;
