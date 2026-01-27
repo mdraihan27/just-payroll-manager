@@ -37,7 +37,7 @@ public class CreateTables {
             + "CREATE TABLE staffs ("
             + "    employeeId INT PRIMARY KEY,"
             + "    supervisorId INT ,"
-            + "    faculty VARCHAR(20),"
+            + "    workShift VARCHAR(20),"
             + "    CONSTRAINT fk_supervisor "
             + "        FOREIGN KEY (supervisorId) "
             + "        REFERENCES employees(employeeId) "

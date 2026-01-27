@@ -45,6 +45,7 @@ public class DatabaseService {
         try (Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
+            System.out.println(rs);
 
             return rs;
 

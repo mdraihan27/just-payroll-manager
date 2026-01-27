@@ -5,18 +5,23 @@ import entities.PayrollRecord;
 import entities.Salary;
 import entities.Staff;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GetPayrollData {
-    public static PayrollRecord getPayrollById(int employeeId) throws SQLException {
-        List<Staff> staffs = new ArrayList<>();
-        String query = "SELECT * FROM payrollRecords WHERE employeeId = "+employeeId+";";
-        ResultSet rsPayroll = DatabaseService.executeQuery(query);
 
-        if (rsPayroll == null) {
+    final static String URL = "jdbc:postgresql://localhost:5432/just_payroll_manager";
+    final static String USER = "raihan";
+    final static String PASSWORD = "raihan";
+
+
+    public static PayrollRecord getPayrollById(int employeeId, int month, int year) throws SQLException {
+        String query = "SELECT * FROM payrollRecords WHERE employeeId = " + employeeId + " AND month = " + month + " AND year = " + year + ";";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rsPayroll = stmt.executeQuery(query);
+        if (rsPayroll == null || !rsPayroll.next()) {
             return null;
         }
         Salary salary = new Salary(
@@ -30,14 +35,12 @@ public class GetPayrollData {
                 rsPayroll.getInt("incomeTax"),
                 rsPayroll.getInt("lunchService")
         );
-
         PayrollRecord payrollRecord = new PayrollRecord(
                 rsPayroll.getInt("employeeId"),
                 rsPayroll.getInt("month"),
                 rsPayroll.getInt("year"),
                 rsPayroll.getString("disbursedOn"),
                 salary);
-
         return payrollRecord;
     }
 

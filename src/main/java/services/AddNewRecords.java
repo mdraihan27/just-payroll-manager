@@ -31,7 +31,7 @@ public class AddNewRecords {
     public static void addStaff(Staff staff) {
         addEmployee(staff);
         String supervisorIdStr = (staff.getSupervisorId() == 0) ? "NULL" : String.valueOf(staff.getSupervisorId());
-        String sql = "INSERT INTO staffs (employeeId, supervisorId, faculty) VALUES (" + staff.getEmployeeId() + ", "
+        String sql = "INSERT INTO staffs (employeeId, supervisorId, workShift) VALUES (" + staff.getEmployeeId() + ", "
                 + supervisorIdStr + ", '" + staff.getWorkShift() + "');";
         new DatabaseService().executeUpdate(sql);
     }
