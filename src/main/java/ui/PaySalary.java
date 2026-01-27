@@ -4,6 +4,7 @@ import entities.*;
 import services.AddNewRecords;
 import services.GetEmployeeData;
 import services.UpdateRecords;
+import services.GetPayrollData;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -51,6 +52,30 @@ public class PaySalary {
 				int year = Integer.parseInt(yearField.getText().trim());
 				if (month < 1 || month > 12) throw new Exception("Month must be 1-12");
 				if (year < 2000 || year > 3000) throw new Exception("Year out of range");
+
+				int prevMonth = (month == 1) ? 12 : (month - 1);
+				int prevYear = (month == 1) ? (year - 1) : year;
+
+				// Check if current month is already paid
+				boolean alreadyPaid = GetPayrollData.hasAnyPayrollForMonthYear(month, year);
+				if (alreadyPaid) {
+				    JOptionPane.showMessageDialog(frame,
+					    "Salary for this month (" + month + "/" + year + ") has already been paid.",
+					    "Payment Blocked",
+					    JOptionPane.WARNING_MESSAGE);
+				    return;
+				}
+
+				boolean previousPaid = GetPayrollData.hasAnyPayrollForMonthYear(prevMonth, prevYear);
+				if (!previousPaid) {
+				    JOptionPane.showMessageDialog(frame,
+					    "Previous month's salary not found. Please ensure " + prevMonth + "/" + prevYear +
+						    " is paid first.",
+					    "Payment Blocked",
+					    JOptionPane.WARNING_MESSAGE);
+				    return;
+				}
+
 				int count = paySalaryForAll(month, year);
 				JOptionPane.showMessageDialog(frame, "Salary paid for " + count + " employees.");
 				frame.dispose();

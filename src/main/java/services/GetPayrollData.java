@@ -46,77 +46,328 @@ public class GetPayrollData {
 
     public static int getPayrollByDept(String department) throws SQLException {
 
-        String query = "SELECT *\n" +
-                "FROM payrollRecords\n" +
-                "WHERE employeeId IN (\n" +
-                "    SELECT employeeId\n" +
-                "    FROM teachers\n" +
-                "    WHERE department = "+department+"\n" +
-                ");\n";
+        String dep = department.replace("'", "''");
+        String query =
+                "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (\n" +
+                "  SELECT t.employeeId FROM teachers t WHERE t.department = '" + dep + "'\n" +
+                ") OR pr.employeeId IN (\n" +
+                "  SELECT s.employeeId FROM staffs s\n" +
+                "  WHERE s.supervisorId IN (SELECT t2.employeeId FROM teachers t2 WHERE t2.department='" + dep + "')\n" +
+                ");";
 
-        ResultSet rsPayroll = DatabaseService.executeQuery(query);
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rsPayroll = stmt.executeQuery(query);
 
         if (rsPayroll == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
             return 0;
         }
 
-        return getPayrollSumFromResultSet(rsPayroll);
+        int total = getPayrollSumFromResultSet(rsPayroll);
+        try { rsPayroll.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
 
+    }
+
+    public static int getPayrollByDept(String department, int month, int year) throws SQLException {
+        String dep = department.replace("'", "''");
+        String query =
+                "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year + " AND (\n" +
+                "  pr.employeeId IN (SELECT t.employeeId FROM teachers t WHERE t.department = '" + dep + "')\n" +
+                "  OR pr.employeeId IN (SELECT s.employeeId FROM staffs s WHERE s.supervisorId IN (SELECT t2.employeeId FROM teachers t2 WHERE t2.department='" + dep + "'))\n" +
+                ")";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
     }
 
     public static int getPayrollByFaculty(String faculty) throws SQLException {
 
-        String query = "SELECT *\n" +
-                "FROM payrollRecords\n" +
-                "WHERE employeeId IN (\n" +
-                "    SELECT employeeId\n" +
-                "    FROM teachers\n" +
-                "    WHERE faculty = "+faculty+"\n" +
-                ");\n";
+        String fac = faculty.replace("'", "''");
+        String query =
+                "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (\n" +
+                "  SELECT t.employeeId FROM teachers t WHERE t.faculty = '" + fac + "'\n" +
+                ") OR pr.employeeId IN (\n" +
+                "  SELECT s.employeeId FROM staffs s\n" +
+                "  WHERE s.supervisorId IN (SELECT t2.employeeId FROM teachers t2 WHERE t2.faculty='" + fac + "')\n" +
+                ");";
 
-        ResultSet rsPayroll = DatabaseService.executeQuery(query);
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rsPayroll = stmt.executeQuery(query);
 
         if (rsPayroll == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
             return 0;
         }
 
-        return getPayrollSumFromResultSet(rsPayroll);
+        int total = getPayrollSumFromResultSet(rsPayroll);
+        try { rsPayroll.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
 
+    }
+
+    public static int getPayrollByFaculty(String faculty, int month, int year) throws SQLException {
+        String fac = faculty.replace("'", "''");
+        String query =
+                "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year + " AND (\n" +
+                "  pr.employeeId IN (SELECT t.employeeId FROM teachers t WHERE t.faculty = '" + fac + "')\n" +
+                "  OR pr.employeeId IN (SELECT s.employeeId FROM staffs s WHERE s.supervisorId IN (SELECT t2.employeeId FROM teachers t2 WHERE t2.faculty='" + fac + "'))\n" +
+                ")";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
     }
 
     public static int getPayrollByDesignation(String designation) throws SQLException {
 
-        String query = "SELECT *\n" +
-                "FROM payrollRecords\n" +
-                "WHERE employeeId IN (\n" +
-                "    SELECT employeeId\n" +
-                "    FROM teachers\n" +
-                "    WHERE designation = "+designation+"\n" +
-                ");\n";
+        String des = designation.replace("'", "''");
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (\n" +
+                "  SELECT e.employeeId FROM employees e WHERE e.designation = '" + des + "'\n" +
+                ");";
 
-        ResultSet rsPayroll = DatabaseService.executeQuery(query);
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rsPayroll = stmt.executeQuery(query);
 
         if (rsPayroll == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
             return 0;
         }
 
-        return getPayrollSumFromResultSet(rsPayroll);
+        int total = getPayrollSumFromResultSet(rsPayroll);
+        try { rsPayroll.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
 
     }
+    public static int getPayrollByDesignation(String designation, int month, int year) throws SQLException {
+        String des = designation.replace("'", "''");
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year +
+                " AND pr.employeeId IN (SELECT e.employeeId FROM employees e WHERE e.designation = '" + des + "')";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+    public static int getPayrollByOffice(String office) throws SQLException {
+
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (\n" +
+                "  SELECT o.employeeId FROM officers o WHERE o.office = '" + office + "'\n" +
+                ");";
+
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rsPayroll = stmt.executeQuery(query);
+        if (rsPayroll == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rsPayroll);
+        try { rsPayroll.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getPayrollByOffice(String office, int month, int year) throws SQLException {
+        String off = office.replace("'", "''");
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year +
+                " AND pr.employeeId IN (SELECT o.employeeId FROM officers o WHERE o.office = '" + off + "')";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getTotalDisbursedForTeachers() throws SQLException {
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (SELECT employeeId FROM teachers);";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getTotalDisbursedForOfficers() throws SQLException {
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (SELECT employeeId FROM officers);";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getTotalDisbursedForStaffs() throws SQLException {
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.employeeId IN (SELECT employeeId FROM staffs);";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
+            return 0;
+        }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getTotalDisbursedForTeachers(int month, int year) throws SQLException {
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year +
+                " AND pr.employeeId IN (SELECT employeeId FROM teachers)";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) { try { stmt.close(); } catch (Exception ignore) {} try { conn.close(); } catch (Exception ignore) {} return 0; }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getTotalDisbursedForOfficers(int month, int year) throws SQLException {
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year +
+                " AND pr.employeeId IN (SELECT employeeId FROM officers)";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) { try { stmt.close(); } catch (Exception ignore) {} try { conn.close(); } catch (Exception ignore) {} return 0; }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static int getTotalDisbursedForStaffs(int month, int year) throws SQLException {
+        String query = "SELECT pr.* FROM payrollRecords pr WHERE pr.month = " + month + " AND pr.year = " + year +
+                " AND pr.employeeId IN (SELECT employeeId FROM staffs)";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) { try { stmt.close(); } catch (Exception ignore) {} try { conn.close(); } catch (Exception ignore) {} return 0; }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
 
     public static int getTotalDisbursedPayroll() throws SQLException {
 
         String query = "SELECT *\n" +
                 "FROM payrollRecords\n" ;
 
-        ResultSet rsPayroll = DatabaseService.executeQuery(query);
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rsPayroll = stmt.executeQuery(query);
 
         if (rsPayroll == null) {
+            try { stmt.close(); } catch (Exception ignore) {}
+            try { conn.close(); } catch (Exception ignore) {}
             return 0;
         }
 
-        return getPayrollSumFromResultSet(rsPayroll);
+        int total = getPayrollSumFromResultSet(rsPayroll);
+        try { rsPayroll.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
 
+    }
+
+    public static int getTotalDisbursedPayroll(int month, int year) throws SQLException {
+        String query = "SELECT * FROM payrollRecords WHERE month = " + month + " AND year = " + year + ";";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs == null) { try { stmt.close(); } catch (Exception ignore) {} try { conn.close(); } catch (Exception ignore) {} return 0; }
+        int total = getPayrollSumFromResultSet(rs);
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return total;
+    }
+
+    public static boolean hasAnyPayrollForMonthYear(int month, int year) throws SQLException {
+        String query = "SELECT 1 FROM payrollRecords WHERE month = " + month + " AND year = " + year + " LIMIT 1;";
+        Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery(query);
+        boolean exists = rs != null && rs.next();
+        try { rs.close(); } catch (Exception ignore) {}
+        try { stmt.close(); } catch (Exception ignore) {}
+        try { conn.close(); } catch (Exception ignore) {}
+        return exists;
     }
 
     public static int getPayrollSumFromResultSet(ResultSet rsPayroll) throws SQLException {

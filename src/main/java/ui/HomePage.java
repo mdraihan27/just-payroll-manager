@@ -1,5 +1,6 @@
 package ui;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import entities.*;
 import services.*;
+
 
 
 public class HomePage {
@@ -23,8 +25,8 @@ public class HomePage {
         topLabel.setPreferredSize(new Dimension(1920, 60));
         topLabel.setFont(new Font("Poppins", Font.BOLD, 40));
         topLabel.setOpaque(true);
-        topLabel.setBackground(new Color(70, 130, 180));
-        topLabel.setForeground(Color.WHITE);
+        topLabel.setBackground(new Color(23, 30, 23));
+        topLabel.setForeground(new Color(139, 174, 102));
 
         homeFrame.add(topLabel, BorderLayout.NORTH);
 
@@ -33,14 +35,20 @@ public class HomePage {
         homePanel.setSize(1920, 940);
         homePanel.setBackground(new Color(10, 130, 130));
         JPanel sidePanel = new JPanel();
-        sidePanel.setBackground(new Color(10, 100, 130));
+        sidePanel.setBackground(Color.WHITE);
         sidePanel.setPreferredSize(new Dimension(250, 940));
 
+        Dimension btnSize = new Dimension(240, 70);
+
+
         JButton addEmployeeButton = new JButton("Add Employee");
-        addEmployeeButton.setBackground(new Color(70, 130, 180));
-        addEmployeeButton.setForeground(Color.WHITE);
+        addEmployeeButton.setBackground(new Color(139, 174, 102));
+        addEmployeeButton.setForeground((Color.white));
+        addEmployeeButton.setBorder(BorderFactory.createLineBorder(new Color(139,174,102)));
         addEmployeeButton.setFont(new Font("Poppins", Font.BOLD, 20));
-        addEmployeeButton.setSize(new Dimension(200, 100));
+        addEmployeeButton.setPreferredSize(btnSize);
+        addEmployeeButton.setMaximumSize(btnSize);
+        addEmployeeButton.setMinimumSize(btnSize);
 
         addEmployeeButton.addActionListener(new ActionListener() {
             @Override
@@ -50,10 +58,13 @@ public class HomePage {
         });
 
         JButton updateEmployeeButton = new JButton("Update Employee");
-        updateEmployeeButton.setBackground(new Color(70, 130, 180));
-        updateEmployeeButton.setForeground(Color.WHITE);
+        updateEmployeeButton.setBackground(new Color(139, 174, 102));
+        updateEmployeeButton.setForeground((Color.white));
+        updateEmployeeButton.setBorder(BorderFactory.createLineBorder(new Color(139,174,102)));
         updateEmployeeButton.setFont(new Font("Poppins", Font.BOLD, 20));
-        updateEmployeeButton.setSize(new Dimension(200, 100));
+        updateEmployeeButton.setPreferredSize(btnSize);
+        updateEmployeeButton.setMaximumSize(btnSize);
+        updateEmployeeButton.setMinimumSize(btnSize);
         updateEmployeeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -62,10 +73,13 @@ public class HomePage {
         });
 
         JButton paySalaryButton = new JButton("Pay Salary");
-        paySalaryButton.setBackground(new Color(70, 130, 180));
-        paySalaryButton.setForeground(Color.WHITE);
+        paySalaryButton.setBackground(new Color(139, 174, 102));
+        paySalaryButton.setForeground((Color.white));
+        paySalaryButton.setBorder(BorderFactory.createLineBorder(new Color(139,174,102)));
         paySalaryButton.setFont(new Font("Poppins", Font.BOLD, 20));
-        paySalaryButton.setSize(new Dimension(200, 100));
+        paySalaryButton.setPreferredSize(btnSize);
+        paySalaryButton.setMaximumSize(btnSize);
+        paySalaryButton.setMinimumSize(btnSize);
         paySalaryButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -74,10 +88,13 @@ public class HomePage {
         });
 
         JButton viewSalaryReportButton = new JButton("View Salary Report");
-        viewSalaryReportButton.setBackground(new Color(70, 130, 180));
-        viewSalaryReportButton.setForeground(Color.WHITE);
+        viewSalaryReportButton.setBackground(new Color(139, 174, 102));
+        viewSalaryReportButton.setForeground((Color.white));
+        viewSalaryReportButton.setBorder(BorderFactory.createLineBorder(new Color(139,174,102)));
         viewSalaryReportButton.setFont(new Font("Poppins", Font.BOLD, 20));
-        viewSalaryReportButton.setSize(new Dimension(200, 100));
+        viewSalaryReportButton.setPreferredSize(btnSize);
+        viewSalaryReportButton.setMaximumSize(btnSize);
+        viewSalaryReportButton.setMinimumSize(btnSize);
         viewSalaryReportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -85,21 +102,43 @@ public class HomePage {
             }
         });
 
+        JButton salaryReportByCategoryButton = new JButton("Salary By Category");
+//        salaryReportByCategoryButton.set
+        salaryReportByCategoryButton.setBackground(new Color(139, 174, 102));
+        salaryReportByCategoryButton.setForeground((Color.white));
+        salaryReportByCategoryButton.setBorder(BorderFactory.createLineBorder(new Color(139,174,102)));
+
+        salaryReportByCategoryButton.setFont(new Font("Poppins", Font.BOLD, 20));
+        salaryReportByCategoryButton.setPreferredSize(btnSize);
+        salaryReportByCategoryButton.setMaximumSize(btnSize);
+        salaryReportByCategoryButton.setMinimumSize(btnSize);
+        salaryReportByCategoryButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new SalaryReportByCategoryPage();
+            }
+        });
+
         JButton refreshButton = new JButton("Refresh");
-        refreshButton.setBackground(new Color(70, 130, 180));
-        refreshButton.setForeground(Color.WHITE);
+        refreshButton.setBackground(new Color(139, 174, 102));
+        refreshButton.setForeground(Color.white);
+        refreshButton.setBorder(BorderFactory.createLineBorder(new Color(139,174,102)));
         refreshButton.setFont(new Font("Poppins", Font.BOLD, 20));
-        refreshButton.setSize(new Dimension(200, 100));
+        refreshButton.setPreferredSize(btnSize);
+        refreshButton.setMaximumSize(btnSize);
+        refreshButton.setMinimumSize(btnSize);
 
         sidePanel.setLayout(new BoxLayout(sidePanel, BoxLayout.Y_AXIS));
         sidePanel.add(addEmployeeButton);
-        sidePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        sidePanel.add(Box.createRigidArea(new Dimension(10, 20)));
         sidePanel.add(updateEmployeeButton);
-        sidePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        sidePanel.add(Box.createRigidArea(new Dimension(10, 20)));
         sidePanel.add(paySalaryButton);
-        sidePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        sidePanel.add(Box.createRigidArea(new Dimension(10, 20)));
         sidePanel.add(viewSalaryReportButton);
-        sidePanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        sidePanel.add(Box.createRigidArea(new Dimension(10, 20)));
+        sidePanel.add(salaryReportByCategoryButton);
+        sidePanel.add(Box.createRigidArea(new Dimension(10, 20)));
         sidePanel.add(refreshButton);
 
         homePanel.add(sidePanel, BorderLayout.WEST);
@@ -109,12 +148,12 @@ public class HomePage {
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
         mainPanel.setBackground(new Color(10, 130, 160));
         mainPanel.setSize(1670, 940);
-
+        mainPanel.setBackground(new Color(139, 174, 102));
         // Teachers section
         JLabel teachersLabel = new JLabel("Teachers", SwingConstants.CENTER);
         teachersLabel.setPreferredSize(new Dimension(1670, 30));
-        teachersLabel.setFont(new Font("Poppins", Font.BOLD, 15));
-        teachersLabel.setForeground(Color.BLACK);
+        teachersLabel.setFont(new Font("Poppins", Font.PLAIN, 15));
+        teachersLabel.setForeground(Color.WHITE);
         teachersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(teachersLabel);
 
@@ -175,7 +214,7 @@ public class HomePage {
         JLabel officersLabel = new JLabel("Officers", SwingConstants.CENTER);
         officersLabel.setPreferredSize(new Dimension(1670, 30));
         officersLabel.setFont(new Font("Poppins", Font.PLAIN, 15));
-        officersLabel.setForeground(Color.BLACK);
+        officersLabel.setForeground(Color.WHITE);
         officersLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(officersLabel);
 
@@ -235,7 +274,7 @@ public class HomePage {
         JLabel staffsLabel = new JLabel("Staffs", SwingConstants.CENTER);
         staffsLabel.setPreferredSize(new Dimension(1670, 30));
         staffsLabel.setFont(new Font("Poppins", Font.PLAIN, 15));
-        staffsLabel.setForeground(Color.BLACK);
+        staffsLabel.setForeground(Color.WHITE);
         staffsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(staffsLabel);
 
@@ -307,3 +346,5 @@ public class HomePage {
     }
 
 }
+
+
